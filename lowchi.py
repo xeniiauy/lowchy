@@ -1,5 +1,8 @@
 import discord
+import os
 from discord.ext import commands
+from simpleeval import simple_eval
+from dotenv import load_dotenv
 
 bot = discord.Bot()
 # Create a bot instance
@@ -21,7 +24,7 @@ async def math(ctx, *, question: str):
         expression = question.lower().replace('what is', '').strip()
         # Evaluate the expression
         try:
-            result = eval(expression)
+            result = simple_eval(expression)
             # Respond to the user
             await ctx.send(f"Hi {ctx.author.name}, the answer is {result}! Do you want to know why?")
             # Wait for user response
@@ -41,4 +44,6 @@ async def math(ctx, *, question: str):
             await ctx.send("Sorry, I couldn't understand the expression. Please provide a valid math question.")
 
 # Run the bot with your Discord bot token
-bot.run('DISCORD.TOKEN')
+load_dotenv()  # Load from .env
+token = os.getenv("DISCORD_TOKEN")
+bot.run(token)
